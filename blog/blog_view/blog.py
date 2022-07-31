@@ -8,19 +8,22 @@ def set_email():
     if request.method == 'GET':
         # print('set_email', request.headers)
         print('set_email', request.args.get('user_email'))
-        return redirect(url_for('blog.test_blog'))
+        return redirect(url_for('blog.test_a'))
     else:
         # print('set_email', request.headers)
         # content type 이 application/json 인 경우
         # print('set_email', request.get_json())
         print('set_email', request.form['user_email'])
 
-        return redirect(url_for('blog.test_blog'))
+        return redirect(url_for('blog.test_a'))
 
     # return redirect('/blog/test_blog')
     # return make_response(jsonify(success=True), 200)
 
-
-@blog_abtest.route('/test_blog')
-def test_blog():
+@blog_abtest.route('/a')
+def test_a():
     return render_template('blog_A.html')
+
+@blog_abtest.route('/b')
+def test_b():
+    return render_template('blog_B.html')
