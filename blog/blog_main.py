@@ -8,7 +8,7 @@ import os
 # https 만을 지원하는 기능을 http 에서 테스트할 때 필요한 설정
 os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
 
-app = Flask(__name__, static_url_path='/static')
+app = Flask(__name__ , static_url_path='/static')
 CORS(app)
 #서버를 계속 열고있지 않으므로 세션이 리셋되는 것을 방지해 고정값을 줌(보안상 랜덤값으로 줘야하는 게 맞음)
 app.secret_key = 'fixed_key'
@@ -31,4 +31,4 @@ def unauthorized():
 
 
 if __name__ == '__main__':
-    app.run(host='127.0.0.1', port='8080', debug=True)
+    app.run(host='127.0.0.1', port='8080', debug=False)
