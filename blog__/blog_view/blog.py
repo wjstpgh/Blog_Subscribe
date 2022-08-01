@@ -1,6 +1,7 @@
 from flask import Flask, Blueprint, request, render_template, make_response, jsonify, redirect, url_for
 
-from blog_control.user_mng import User
+#from blog_control.user_mng import User
+from ..blog_control.user_mng import User
 from flask_login import current_user, login_user
 
 blog_abtest = Blueprint('blog', __name__)
