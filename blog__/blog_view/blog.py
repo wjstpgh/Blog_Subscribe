@@ -1,12 +1,13 @@
 from flask import Flask, Blueprint, request, render_template, make_response, jsonify, redirect, url_for
 
-from blog.blog_control.user_mng import User
+from blog_control.user_mng import User
+from flask_login import current_user, login_user
 
 blog_abtest = Blueprint('blog', __name__)
 
-
 @blog_abtest.route('/set_email', methods=['GET', 'POST'])
 def set_email():
+    #실제 form태그의 방식은 post방식을 사용, 아래 get은 연습용
     if request.method == 'GET':
         # print('set_email', request.headers)
         print('set_email', request.args.get('user_email'))
@@ -19,14 +20,28 @@ def set_email():
         # content type이 application/json인 경우에만 아래처럼 바디를 가져올 수 있음
         # print('set_email', request.get_json())
         print('set_email', request.form['user_email'])
+        #요천된 이메일과 페이지명을 기반으로 사용자 객체 생성(user_mng의 create메서드)
         user=User.create(request.form['user_email'], 'A')
+        print(current_user.is_authenticated)
+        print(current_user.user_email)
+        #create메서드로 사용자 객체 생성후 다시 페이지 로드
         return redirect(url_for('blog.test_a'))
 
 #각 페이지 렌더 테스트경로
 @blog_abtest.route('/a')
 def test_a():
-    return render_template('blog_A.html')
+    #만약 사용자가 등록된 상태라면 html문서의 Jinja부분에 user_email을 넘겨줌
+    if current_user.is_authenticated:
+        print('here?')
+        return render_template('blog_A.html', user_email=current_user.user_email)
+    #사용자 미등록 상태라면 user_email이 null인 html문서를 로드
+    else:
+        print('No')
+        return render_template('blog_A.html')
 
 @blog_abtest.route('/b')
 def test_b():
-    return render_template('blog_B.html')
+    if current_user.is_authenticated:
+        return render_template('blog_B.html', user_email=current_user.user_email)
+    else:
+        return render_template('blog_B.html')

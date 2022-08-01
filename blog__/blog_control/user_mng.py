@@ -66,3 +66,7 @@ class User(UserMixin):
         #만약 사용자가 이미 등록되어 있다면 바로 사용자 객체 리턴
         else:
             return user
+        
+User.create('test@test.com','A')
+print(User.create('test@test.com','A'))
+    
