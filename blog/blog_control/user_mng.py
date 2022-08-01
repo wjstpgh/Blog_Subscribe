@@ -1,3 +1,5 @@
+#사용자정보는 mysql에서 관리
+
 from flask_login import UserMixin
 from blog_model.mysql import conn_mysqldb
 

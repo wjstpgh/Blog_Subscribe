@@ -1,5 +1,6 @@
 import pymysql
 
+#데이터베이스 연결
 MYSQL_HOST = 'localhost'
 MYSQL_CONN = pymysql.connect(
     host=MYSQL_HOST,
@@ -10,6 +11,7 @@ MYSQL_CONN = pymysql.connect(
     charset='utf8'
 )
 
+#데이터베이스 재연결 함수
 def conn_mysqldb():
     if not MYSQL_CONN.open:
         MYSQL_CONN.ping(reconnect=True)

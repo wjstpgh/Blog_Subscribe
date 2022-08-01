@@ -1,3 +1,5 @@
+#세션관리는 mongodb에서 관리, 접속로그 저장
+
 from blog_model.mongodb import conn_mongodb
 from datetime import datetime
 
@@ -12,7 +14,7 @@ class BlogSession():
     def save_session_info(session_ip, user_email, webpage_name):
         #접속 시간을 now_time에 담음
         now = datetime.now()
-        now_time = now.strftime("%d/%m/%Y %H:%M:%S")  # https://strftime.org/
+        now_time = now.strftime("%Y/%m/%d %H:%M:%S")# 로그타임 양식
 
         #mongodb에 세션ip,사용자이메일,웹페이지이름,접속시간을 로그형식으로 저장
         mongo_db = conn_mongodb()
