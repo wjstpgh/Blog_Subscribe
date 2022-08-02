@@ -1,7 +1,6 @@
 from flask import Flask, Blueprint, request, render_template, make_response, jsonify, redirect, url_for
 
-#from blog_control.user_mng import User
-from ..blog_control.user_mng import User
+from blog_control.user_mng import User
 from flask_login import current_user, login_user
 
 blog_abtest = Blueprint('blog', __name__)
@@ -23,8 +22,8 @@ def set_email():
         print('set_email', request.form['user_email'])
         #요천된 이메일과 페이지명을 기반으로 사용자 객체 생성(user_mng의 create메서드)
         user=User.create(request.form['user_email'], 'A')
-        print(current_user.is_authenticated)
-        print(current_user.user_email)
+        #사용자 객체를 통해 세션생성
+        login_user(user)
         #create메서드로 사용자 객체 생성후 다시 페이지 로드
         return redirect(url_for('blog.test_a'))
 
@@ -33,15 +32,17 @@ def set_email():
 def test_a():
     #만약 사용자가 등록된 상태라면 html문서의 Jinja부분에 user_email을 넘겨줌
     if current_user.is_authenticated:
-        print('here?')
         return render_template('blog_A.html', user_email=current_user.user_email)
     #사용자 미등록 상태라면 user_email이 null인 html문서를 로드
     else:
-        print('No')
         return render_template('blog_A.html')
 
 @blog_abtest.route('/b')
 def test_b():
+    #create로 생성된 user객체로 login_user, id값으로 사용자등록
+    #main의 load_user데코레이터 내부호출
+    #load_user의 리턴 -> user_mng의 get메서드를 통해 사용자 반환
+    #사용자가 반환된다면 아래 값이 true가 됨
     if current_user.is_authenticated:
         return render_template('blog_B.html', user_email=current_user.user_email)
     else:
