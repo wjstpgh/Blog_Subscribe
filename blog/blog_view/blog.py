@@ -1,7 +1,7 @@
 from flask import Flask, Blueprint, request, render_template, make_response, jsonify, redirect, url_for
-
+import datetime
 from blog_control.user_mng import User
-from flask_login import current_user, login_user
+from flask_login import current_user, login_user, logout_user
 
 blog_abtest = Blueprint('blog', __name__)
 
@@ -23,9 +23,17 @@ def set_email():
         #요천된 이메일과 페이지명을 기반으로 사용자 객체 생성(user_mng의 create메서드)
         user=User.create(request.form['user_email'], 'A')
         #사용자 객체를 통해 세션생성
-        login_user(user)
+        #30일간 로그인 세션정보 저장
+        login_user(user, remember=True, duration=datetime.timedelta(days=30))
         #create메서드로 사용자 객체 생성후 다시 페이지 로드
         return redirect(url_for('blog.test_a'))
+
+#구독취소 버튼시 세션정보 지우고 등록된 아이디 삭제
+@blog_abtest.route('/logout')
+def logout():
+    #User.delete(current_user.id)
+    logout_user()
+    return redirect(url_for('blog.test_a'))
 
 #각 페이지 렌더 테스트경로
 @blog_abtest.route('/a')
