@@ -33,11 +33,11 @@ class BlogSession():
             #세션 카운트가 0일때 1로 변경해주고 A를 리턴
             if BlogSession.session_count == 0:
                 BlogSession.session_count = 1
-                return 'blog_A.html'
+                return BlogSession.blog_page['A']
             else:
             #세션 카운트가 1일때 다시 0으로 변경해주고 B를 리턴
                 BlogSession.session_count = 0
-                return 'blog_B.html'
+                return BlogSession.blog_page['B']
         #블로그 id가 존재할때, 즉 구독중일 때 blog_page딕셔너리에 해당하는 페이지를 리턴
         else:
             return BlogSession.blog_page[blog_id]

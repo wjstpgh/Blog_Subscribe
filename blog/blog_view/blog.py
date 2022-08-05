@@ -1,6 +1,7 @@
-from flask import Flask, Blueprint, request, render_template, make_response, jsonify, redirect, url_for
+from flask import Flask, Blueprint, request, render_template, make_response, jsonify, redirect, url_for, session
 import datetime
 from blog_control.user_mng import User
+from blog_control.session_mng import BlogSession
 from flask_login import current_user, login_user, logout_user
 
 blog_abtest = Blueprint('blog', __name__)
@@ -26,15 +27,33 @@ def set_email():
         #30일간 로그인 세션정보 저장
         login_user(user, remember=True, duration=datetime.timedelta(days=30))
         #create메서드로 사용자 객체 생성후 다시 페이지 로드
-        return redirect(url_for('blog.test_a'))
+        return redirect(url_for('blog.blog'))
 
 #구독취소 버튼시 세션정보 지우고 등록된 아이디 삭제
 @blog_abtest.route('/logout')
 def logout():
     User.delete(current_user.id)
     logout_user()
-    return redirect(url_for('blog.test_a'))
+    return redirect(url_for('blog.blog'))
 
+@blog_abtest.route('/blog')
+def blog():
+    #구독되어있다면
+    if current_user.is_authenticated:
+        #사용자의 페이지 아이디로 세션정보 생성
+        webpage_name = BlogSession.get_blog_page(current_user.blog_id)
+        #각 정보로 세션 저장(MongoDB에 로그로 저장)
+        BlogSession.save_session_info(
+            session['client_id'], current_user.user_email, webpage_name)
+        #블로그 피이지와 이메일을 통해 페이지 렌더링
+        return render_template(webpage_name, user_email=current_user.user_email)
+    else:
+        webpage_name = BlogSession.get_blog_page()
+        #구독이 되어있지 않다면 anony로 로그에 저장
+        BlogSession.save_session_info(
+            session['client_id'], 'anonymous', webpage_name)
+        return render_template(webpage_name)
+    
 #각 페이지 렌더 테스트경로
 @blog_abtest.route('/a')
 def test_a():
