@@ -65,4 +65,16 @@ class User(UserMixin):
             return User.find(user_email)
         #만약 사용자가 이미 등록되어 있다면 바로 사용자 객체 리턴
         else:
-            return user    
+            return user
+        
+    #구독취소시 호출되는 logout메서드에서 delete를 실행해 db에서 사용자 정보를 삭제
+    @staticmethod
+    def delete(user_id):
+        mysql_db = conn_mysqldb()
+        db_cursor = mysql_db.cursor()
+        #사용자 아이디를 통해 삭제 쿼리 실행
+        sql = "DELETE FROM user_info WHERE USER_ID = %d" % (user_id)
+        deleted = db_cursor.execute(sql)
+        mysql_db.commit()
+        #리턴이 0이면 삭제할 것이 없다는 것
+        return deleted    
