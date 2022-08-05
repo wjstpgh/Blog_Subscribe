@@ -31,7 +31,7 @@ def set_email():
 #구독취소 버튼시 세션정보 지우고 등록된 아이디 삭제
 @blog_abtest.route('/logout')
 def logout():
-    #User.delete(current_user.id)
+    User.delete(current_user.id)
     logout_user()
     return redirect(url_for('blog.test_a'))
 
