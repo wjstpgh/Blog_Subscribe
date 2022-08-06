@@ -1,8 +1,9 @@
-from flask import Flask, Blueprint, request, render_template, make_response, jsonify, redirect, url_for, session
+from flask import Blueprint, request, render_template, redirect, url_for, session
+from flask_login import current_user, login_user, logout_user, login_required
 import datetime
 from blog_control.user_mng import User
 from blog_control.session_mng import BlogSession
-from flask_login import current_user, login_user, logout_user, login_required
+
 
 blog_abtest = Blueprint('blog', __name__)
 
