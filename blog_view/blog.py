@@ -2,9 +2,14 @@ from flask import Flask, Blueprint, request, render_template, make_response, jso
 import datetime
 from blog_control.user_mng import User
 from blog_control.session_mng import BlogSession
-from flask_login import current_user, login_user, logout_user
+from flask_login import current_user, login_user, logout_user, login_required
 
 blog_abtest = Blueprint('blog', __name__)
+
+@blog_abtest.route('/auth')
+@login_required
+def auth_test():
+    return 'auth'
 
 @blog_abtest.route('/set_email', methods=['GET', 'POST'])
 def set_email():
@@ -20,9 +25,9 @@ def set_email():
         # print('set_email', request.headers)
         # content type이 application/json인 경우에만 아래처럼 바디를 가져올 수 있음
         # print('set_email', request.get_json())
-        print('set_email', request.form['user_email'])
+        # print('set_email', request.form['user_email'])
         #요천된 이메일과 페이지명을 기반으로 사용자 객체 생성(user_mng의 create메서드)
-        user=User.create(request.form['user_email'], 'A')
+        user=User.create(request.form['user_email'], request.form['blog_id'])
         #사용자 객체를 통해 세션생성
         #30일간 로그인 세션정보 저장
         login_user(user, remember=True, duration=datetime.timedelta(days=30))
