@@ -1,4 +1,4 @@
-from db_model.test_db_model import test_db
+from blog_model.test_db_model import test_db
 import os
 
 def test_blog():
