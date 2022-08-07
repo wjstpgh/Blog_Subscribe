@@ -1,3 +1,4 @@
+from unittest import result
 import pymysql
 
 #데이터베이스 연결
@@ -10,6 +11,14 @@ MYSQL_CONN = pymysql.connect(
     db='blog_db',
     charset='utf8'
 )
+
+# 아래코드는 구독자 정보 확인 코드
+# show=MYSQL_CONN.cursor()
+# sql="SELECT * FROM user_info"
+# show.execute(sql)
+# results=show.fetchall()
+# for x in results:
+#     print(x)
 
 #데이터베이스 재연결 함수
 def conn_mysqldb():
