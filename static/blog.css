@@ -29,6 +29,15 @@ p {
   line-height: 1.8em;
 }
 
+.img {
+  height: auto;
+  width: 760px;
+}
+
+.smallImg{
+  width: 300px;
+}
+
 .display-4 {
   font-size: 2.5rem;
 }
